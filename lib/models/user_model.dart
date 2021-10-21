@@ -5,7 +5,7 @@ class UserModel {
   final String lastName;
   final String avatar;
 
-  UserModel({this.email, this.firstName, this.lastName, this.avatar, this.id});
+  UserModel({required this.email, required this.firstName, required this.lastName, required this.avatar, required this.id});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

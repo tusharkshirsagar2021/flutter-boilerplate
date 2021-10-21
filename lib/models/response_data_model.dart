@@ -9,16 +9,22 @@ import 'package:http/http.dart' as http;
 ///              2. Error and Messages -  key where your error, errors and message are.
 ///              3. okAndContainsData Condition - Change logic according to your API Structure
 class ResponseData {
-  int statusCode;
-  bool ok;
-  bool okAndContainsData;
+  int? statusCode;
+  bool? ok;
+  bool? okAndContainsData;
   var data;
   var message;
-  ResponseErrors errors;
-  String rawResponseBody;
+  ResponseErrors? errors;
+  String? rawResponseBody;
 
   ResponseData(
-      {this.statusCode, this.data, this.message, this.errors, this.ok: false, this.okAndContainsData: false, this.rawResponseBody});
+      {this.statusCode,
+      this.data,
+      this.message,
+      this.errors,
+      this.ok: false,
+      this.okAndContainsData: false,
+      this.rawResponseBody});
 
   factory ResponseData.fromResponse(http.Response response) {
     var parsedJson = jsonDecode(response.body);
@@ -27,7 +33,9 @@ class ResponseData {
       ok: (response.statusCode == 200 || response.statusCode == 201),
       data: parsedJson['data'] != null ? parsedJson['data'] : null,
       rawResponseBody: response.body != null ? response.body : null,
-      okAndContainsData: (response.statusCode == 200 || response.statusCode == 201) && (parsedJson['data'] != null),
+      okAndContainsData:
+          (response.statusCode == 200 || response.statusCode == 201) &&
+              (parsedJson['data'] != null),
       message: parsedJson['message'] != null ? parsedJson['message'] : "",
       errors: parsedJson['errors'] != null
           ? parsedJson['errors'].runtimeType == String
@@ -41,7 +49,7 @@ class ResponseData {
 }
 
 class ResponseErrors {
-  String message;
+  String? message;
 
   ResponseErrors({
     this.message,

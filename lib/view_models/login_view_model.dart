@@ -15,9 +15,9 @@ class LoginViewModel with ChangeNotifier {
   TextEditingController emailTextFieldController = TextEditingController(text: "eve.holt@reqres.in");
   TextEditingController passwordTextFieldController = TextEditingController(text: "cityslicka");
 
-  void loginUser({@required BuildContext context, bool logInWithCommonLoader: false}) async {
+  void loginUser({required BuildContext context, bool logInWithCommonLoader: false}) async {
     if (emailTextFieldController.text.isEmpty) {
-      AlertBar.show(context, title: "Enter email", description: "Please enter a Email");
+      AlertBar.show(context, title: "Enter email", description: "Please enter a Email", icon: null);
       return;
     }
     if (passwordTextFieldController.text.isEmpty) {
@@ -34,10 +34,10 @@ class LoginViewModel with ChangeNotifier {
     ResponseData responseData =
         await ApiService().loginUser(context: context, loginModel: _loginModel, logInWithCommonLoader: logInWithCommonLoader);
 
-    if (responseData.ok) {
+    if (responseData.ok == null) {
       //TODO: Push to next screen
       loadingStatus = ApiStatus.completed;
-      String token = jsonDecode(responseData.rawResponseBody)['token'];
+      String token = jsonDecode(responseData.rawResponseBody.toString())['token'];
       SharedPreferencesHelper.setAuthToken(token);
       AlertBar.show(context, title: "Done", description: "Login Successful Token: $token", backgroundColor: ColorConstants.GREEN);
     } else {

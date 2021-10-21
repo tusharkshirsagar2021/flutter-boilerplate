@@ -5,7 +5,7 @@ import 'package:flutter_mvvm_boilerplate/widgets/common_text_field.dart';
 import 'package:provider/provider.dart';
 
 class CustomURLView extends StatefulWidget {
-  CustomURLView({Key key}) : super(key: key);
+  CustomURLView({  Key? key}) : super(key: key);
 
   static const String TAG = "/CustomURLView";
 
@@ -18,7 +18,7 @@ class _CustomURLViewState extends State<CustomURLView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<CustomURLViewModel>(context, listen: false).checkIfURLSetPreviously();
+    Provider.of<CustomURLViewModel>(context, listen: false).checkIfURLSetPreviously(context: null);
   }
 
   @override

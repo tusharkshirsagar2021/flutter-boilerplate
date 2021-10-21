@@ -8,7 +8,7 @@ import 'package:flutter_mvvm_boilerplate/widgets/common_text_field.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
-  LoginView({Key key}) : super(key: key);
+  LoginView({  Key? key}) : super(key: key);
 
   static const String TAG = "/LoginView";
 
@@ -55,7 +55,7 @@ class _LoginViewState extends State<LoginView> {
     LoginViewModel _loginViewModel = Provider.of<LoginViewModel>(context);
     return Scaffold(
       ///This flag will allow to ignore Keyboard Overflow.
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           AppConstants.APP_NAME,

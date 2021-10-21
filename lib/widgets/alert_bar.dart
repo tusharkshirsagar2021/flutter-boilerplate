@@ -9,9 +9,19 @@ class AlertBar {
   static final int BOTTOM = 2;
 
   static void show(BuildContext context,
-      {String title, String description, int duration, int gravity, Color backgroundColor, IconData icon}) {
+      {String? title,
+      String? description,
+      int? duration,
+      int? gravity,
+      Color? backgroundColor,
+      IconData? icon}) {
     OverlayView.createView(context,
-        title: title, description: description, duration: duration, gravity: gravity, backgroundColor: backgroundColor, icon: icon);
+        title: title!,
+        description: description!,
+        duration: duration!,
+        gravity: gravity!,
+        backgroundColor: backgroundColor!,
+        icon: icon!);
   }
 }
 
@@ -24,12 +34,17 @@ class OverlayView {
 
   OverlayView._internal();
 
-  static OverlayState _overlayState;
-  static OverlayEntry _overlayEntry;
+  static OverlayState? _overlayState;
+  static OverlayEntry? _overlayEntry;
   static bool _isVisible = false;
 
   static void createView(BuildContext context,
-      {String title, String description, int duration, int gravity, Color backgroundColor, IconData icon}) {
+      {required String title,
+      required String description,
+      required int duration,
+      required int gravity,
+      required Color backgroundColor,
+      required IconData icon}) {
     _overlayState = Navigator.of(context).overlay;
 
     if (!_isVisible) {
@@ -41,12 +56,13 @@ class OverlayView {
           description: description,
           overlayDuration: duration == null ? AlertBar.LENGTH_SHORT : duration,
           gravity: gravity == null ? AlertBar.TOP : gravity,
-          backgroundColor: backgroundColor == null ? Colors.grey : backgroundColor,
+          backgroundColor:
+              backgroundColor == null ? Colors.grey : backgroundColor,
           icon: icon == null ? Icons.notifications : icon,
         );
       });
 
-      _overlayState.insert(_overlayEntry);
+      _overlayState?.insert(_overlayEntry!);
     }
   }
 
@@ -67,30 +83,41 @@ class EdgeOverlay extends StatefulWidget {
   final Color backgroundColor;
   final IconData icon;
 
-  EdgeOverlay({this.title, this.description, this.overlayDuration, this.gravity, this.backgroundColor, this.icon});
+  EdgeOverlay(
+      {required this.title,
+      required this.description,
+      required this.overlayDuration,
+      required this.gravity,
+      required this.backgroundColor,
+      required this.icon});
 
   @override
   _EdgeOverlayState createState() => _EdgeOverlayState();
 }
 
-class _EdgeOverlayState extends State<EdgeOverlay> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Tween<Offset> _positionTween;
-  Animation<Offset> _positionAnimation;
+class _EdgeOverlayState extends State<EdgeOverlay>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Tween<Offset> _positionTween;
+  late Animation<Offset> _positionAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 750));
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 750));
 
     if (widget.gravity == 1) {
-      _positionTween = Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset.zero);
+      _positionTween =
+          Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset.zero);
     } else {
-      _positionTween = Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0));
+      _positionTween =
+          Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0));
     }
 
-    _positionAnimation = _positionTween.animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
+    _positionAnimation = _positionTween.animate(
+        CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
 
     _controller.forward();
 
@@ -126,8 +153,11 @@ class _EdgeOverlayState extends State<EdgeOverlay> with SingleTickerProviderStat
         position: _positionAnimation,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          padding:
-              EdgeInsets.fromLTRB(20, widget.gravity == 1 ? statusBarHeight + 20 : bottomHeight + 20, 20, widget.gravity == 1 ? 20 : 35),
+          padding: EdgeInsets.fromLTRB(
+              20,
+              widget.gravity == 1 ? statusBarHeight + 20 : bottomHeight + 20,
+              20,
+              widget.gravity == 1 ? 20 : 35),
           color: widget.backgroundColor,
           child: OverlayWidget(
             title: widget.title,
@@ -145,7 +175,8 @@ class OverlayWidget extends StatelessWidget {
   final String description;
   final IconData iconData;
 
-  OverlayWidget({this.title = '', this.description = '', this.iconData});
+  OverlayWidget(
+      {this.title = '', this.description = '', required this.iconData});
 
   @override
   Widget build(BuildContext context) {
@@ -185,19 +216,24 @@ class OverlayWidget extends StatelessWidget {
 class AnimatedIcon extends StatefulWidget {
   final IconData iconData;
 
-  AnimatedIcon({this.iconData});
+  AnimatedIcon({required this.iconData});
 
   @override
   _AnimatedIconState createState() => _AnimatedIconState();
 }
 
-class _AnimatedIconState extends State<AnimatedIcon> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+class _AnimatedIconState extends State<AnimatedIcon>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, lowerBound: 0.8, upperBound: 1.1, duration: Duration(milliseconds: 600));
+    _controller = AnimationController(
+        vsync: this,
+        lowerBound: 0.8,
+        upperBound: 1.1,
+        duration: Duration(milliseconds: 600));
 
     _controller.forward();
     listenToAnimation();
@@ -230,7 +266,8 @@ class _AnimatedIconState extends State<AnimatedIcon> with SingleTickerProviderSt
           size: 35,
           color: Colors.white,
         ),
-        builder: (context, widget) => Transform.scale(scale: _controller.value, child: widget),
+        builder: (context, widget) =>
+            Transform.scale(scale: _controller.value, child: widget),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoaderWidget {
-  static OverlayEntry _overlayEntry;
+  static OverlayEntry? _overlayEntry;
   static bool _onScreen = false;
 
   static bool isLoaderOn() => _onScreen;
@@ -12,13 +12,13 @@ class LoaderWidget {
     hideLoader(context);
 
     _overlayEntry = createOverlayEntry(context);
-    Overlay.of(context).insert(_overlayEntry);
+    Overlay.of(context)?.insert(_overlayEntry!);
     _onScreen = true;
   }
 
   static void hideLoader(BuildContext context) {
     if (_onScreen) {
-      _overlayEntry.remove();
+      _overlayEntry!.remove();
       _onScreen = false;
     }
   }

@@ -5,7 +5,7 @@ class SharedPreferencesHelper {
   static final String _authToken = "authToken";
   static final String _customURL = "customURL";
 
-  static Future<String> getAuthToken() async {
+  static Future<String?> getAuthToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_authToken);
   }
@@ -26,7 +26,7 @@ class SharedPreferencesHelper {
     return prefs.remove(_authToken);
   }
 
-  static Future<String> getCustomURL() async {
+  static Future<String?> getCustomURL() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_customURL);
   }

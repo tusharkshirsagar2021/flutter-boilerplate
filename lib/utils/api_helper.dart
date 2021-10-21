@@ -34,7 +34,7 @@ class ApiHelper {
     Map<String, String> _map = {
       //Add or Remove headers from here
       'Content-Type': 'application/json',
-      'Authorization': useAuth ? 'Bearer ' + await SingletonConstants().getToken : "",
+      'Authorization': useAuth ? 'Bearer ' + await SingletonConstants().getToken.toString() : "",
     };
     return _map;
   }
@@ -78,22 +78,22 @@ class ApiHelper {
       if (showError) {
         if (responseData.errors != null) {
           AlertBar.show(context,
-              title: 'Error', description: responseData.errors.message, gravity: AlertBar.TOP, backgroundColor: Colors.red);
+              title: 'Error', description: responseData.errors!.message, gravity: AlertBar.TOP, backgroundColor: Colors.red);
         }
       }
     }
     return responseData;
   }
 
-  Future<ResponseData> postRequest(BuildContext context, var requestUri, Map map,
-      {bool showError: false,
+  Future<ResponseData> postRequest(BuildContext? context, var requestUri, Map map,
+      { bool showError: false,
       bool showMessage: false,
-      bool showLoader: true,
-      bool useAuth: true,
-      String responseName: "",
-      bool showLog: true,
-      bool showConnectivityError: true,
-      int apiVersion: 1}) async {
+      bool showLoader : true,
+      bool useAuth : true,
+      String responseName : "",
+      bool showLog : true,
+      bool showConnectivityError : true,
+      int apiVersion : 1}) async {
     ResponseData responseData = ResponseData();
     if (showLog) {
       debugPrint("Requested URL: " + requestUri.toString());
@@ -101,8 +101,8 @@ class ApiHelper {
     }
 
     var jsonBody = JsonEncoder().convert(map);
-    if (await NetworkCheck.isOnline(context, showConnectivityError)) {
-      if (showLoader) LoaderWidget.showLoader(context);
+    if (await NetworkCheck.isOnline(context!, showConnectivityError)) {
+      if (showLoader) LoaderWidget.showLoader(context!);
       await http
           .post(requestUri, body: jsonBody, headers: await _getHeaders(useAuth, apiVersion))
           .timeout(Duration(seconds: _DEFAULT_TIMEOUT))
@@ -128,7 +128,7 @@ class ApiHelper {
   }
 
   Future<ResponseData> putRequest(
-    BuildContext context,
+    BuildContext? context,
     var requestUri,
     Map map, {
     bool showError: false,
@@ -146,8 +146,8 @@ class ApiHelper {
       debugPrint("Map: $map");
     }
     var jsonBody = JsonEncoder().convert(map);
-    if (await NetworkCheck.isOnline(context, showConnectivityError)) {
-      if (showLoader) LoaderWidget.showLoader(context);
+    if (await NetworkCheck.isOnline(context!, showConnectivityError)) {
+      if (showLoader) LoaderWidget.showLoader(context!);
 
       await http
           .put(requestUri, body: jsonBody, headers: await _getHeaders(useAuth, apiVersion))
@@ -173,7 +173,7 @@ class ApiHelper {
     return responseData;
   }
 
-  Future<ResponseData> patchRequest(BuildContext context, var requestUri, Map map,
+  Future<ResponseData> patchRequest(BuildContext? context, var requestUri, Map map,
       {bool showError: false,
       bool showMessage: false,
       bool showLoader: false,
@@ -188,8 +188,8 @@ class ApiHelper {
       debugPrint("Map: $map");
     }
     var jsonBody = JsonEncoder().convert(map);
-    if (await NetworkCheck.isOnline(context, showConnectivityError)) {
-      if (showLoader) LoaderWidget.showLoader(context);
+    if (await NetworkCheck.isOnline(context!, showConnectivityError)) {
+      if (showLoader) LoaderWidget.showLoader(context!);
 
       await http
           .patch(requestUri, body: jsonBody, headers: await _getHeaders(useAuth, apiVersion))
@@ -215,7 +215,7 @@ class ApiHelper {
     return responseData;
   }
 
-  Future<ResponseData> getRequest(BuildContext context, var requestUri,
+  Future<ResponseData> getRequest(BuildContext? context, var requestUri,
       {bool showError: false,
       bool showMessage: false,
       bool showLoader: false,
@@ -229,8 +229,8 @@ class ApiHelper {
       debugPrint("Requested URL: " + requestUri.toString());
     }
 
-    if (await NetworkCheck.isOnline(context, showConnectivityError)) {
-      if (showLoader) LoaderWidget.showLoader(context);
+    if (await NetworkCheck.isOnline(context!, showConnectivityError)) {
+      if (showLoader) LoaderWidget.showLoader(context!);
 
       await http
           .get(requestUri, headers: await _getHeaders(useAuth, apiVersion))
@@ -256,7 +256,7 @@ class ApiHelper {
     return responseData;
   }
 
-  Future<ResponseData> deleteRequest(BuildContext context, var requestUri,
+  Future<ResponseData> deleteRequest(BuildContext? context, var requestUri,
       {bool showError: false,
       bool showMessage: false,
       bool showLoader: false,
@@ -269,14 +269,14 @@ class ApiHelper {
     if (showLog) {
       debugPrint("Requested URL: " + requestUri.toString());
     }
-    if (await NetworkCheck.isOnline(context, showConnectivityError)) {
-      if (showLoader) LoaderWidget.showLoader(context);
+    if (await NetworkCheck.isOnline(context!, showConnectivityError)) {
+      if (showLoader) LoaderWidget.showLoader(context!);
 
       await http
           .delete(requestUri, headers: await _getHeaders(useAuth, apiVersion))
           .timeout(Duration(seconds: _DEFAULT_TIMEOUT))
           .then((http.Response response) async {
-        if (showLoader) LoaderWidget.hideLoader(context);
+        if (showLoader) LoaderWidget.hideLoader(context!);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           if (showLog) {
@@ -285,10 +285,10 @@ class ApiHelper {
 
           responseData = ResponseData.fromResponse(response);
         } else {
-          responseData = await _handleError(context, response, responseName, showLog, showMessage, showError);
+          responseData = await _handleError(context!, response, responseName, showLog, showMessage, showError);
         }
       }).catchError((error) {
-        if (showLoader) LoaderWidget.hideLoader(context);
+        if (showLoader) LoaderWidget.hideLoader(context!);
         debugPrint(error.toString());
       });
     } else {

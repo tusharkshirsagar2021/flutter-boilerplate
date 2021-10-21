@@ -9,15 +9,15 @@ class CustomURLViewModel with ChangeNotifier {
   TextEditingController urlTextFieldController = TextEditingController();
 
   //Check if custom URL was set previously if true then re-set it in texfield
-  void checkIfURLSetPreviously({@required BuildContext context}) async {
-    String url = await SharedPreferencesHelper.getCustomURL();
+  void checkIfURLSetPreviously({ BuildContext? context}) async {
+    String? url = await SharedPreferencesHelper.getCustomURL();
     if (url != null) {
       urlTextFieldController.text = url;
     }
   }
 
   //Set URL in singleton class and shared preference
-  void setURL({@required BuildContext context}) async {
+  void setURL({required BuildContext context}) async {
     if (urlTextFieldController.text.isEmpty) {
       AlertBar.show(context, title: "Enter URL", description: "Please enter a URL");
       return;
@@ -27,7 +27,7 @@ class CustomURLViewModel with ChangeNotifier {
     Navigator.pushNamedAndRemoveUntil(context, LoginView.TAG, (route) => false);
   }
 
-  void setStaging({BuildContext context}) async {
+  void setStaging({required BuildContext context}) async {
     SingletonConstants().setBaseUrl(ApiConstants.SERVER_BASE_URL);
     Navigator.pushNamedAndRemoveUntil(context, LoginView.TAG, (route) => false);
   }
